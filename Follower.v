@@ -1,14 +1,13 @@
 module Follower(clk,RST_n,led,a2d_SS_n,SCLK,MISO,MOSI,rev_rht,
                 rev_lft,fwd_rht,fwd_lft,IR_in_en,IR_mid_en,IR_out_en,
 				in_transit,OK2Move,buzz,buzz_n,BC,RX);
-
+	//// look i added comments!!!!!!!!!!
 				
   input clk,RST_n;			// 50MHz clock and asynch active low reset (unsynched)
   input MISO;				// SPI input (from ADC)
   input BC;					// serial barcode data input
   input OK2Move;			// from proximity sensor,  when high we can move
   input RX;					// UART input from Bluegiga module
-  
   output [7:0] led;				// active high LEDs
   output a2d_SS_n,SCLK,MOSI;	// SPI signal outputs
   output rev_rht,fwd_rht;		// right motor PWM signals
