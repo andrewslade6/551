@@ -65,10 +65,10 @@ assign twosLEFT  = ~lft + 1;
 assign twosRIGHT = ~rht + 1;
 
 //10 bit magnitudes for PWM module
-assign dutyLEFT = (lft[10])  ? {1'b0, twosLEFT[8:0]} :
-								{1'b0, lft[8:0]};
-assign dutyRIGHT = (rht[10]) ? {1'b0, twosRIGHT[8:0]}:
-								{1'b0, rht[8:0]};
+assign dutyLEFT = (lft[10])  ? twosLEFT[9:0] :
+                               {lft[9:0]};
+assign dutyRIGHT = (rht[10]) ? twosRIGHT[9:0]:
+                                {rht[9:0]};
 
 
 endmodule

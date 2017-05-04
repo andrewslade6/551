@@ -50,21 +50,7 @@ assign half_baud_cnt = (baud_cnt == 12'd1302) ? 1'b1 : 1'b0;
 // set flag if baud count reaches full value		
 assign full_baud_cnt = (baud_cnt == 12'd2604) ? 1'b1 : 1'b0;
 
-/*
-// falling edge detection of start bit
-always_ff @(posedge clk, negedge rst_n)
-	if(!rst_n) begin			//// 	IS THIS HOW YOU DO ELSE WITH BEGIN END????
-		edge1 <= 0;
-		edge2 <= 0;
-	end
-	// if RX was high and next clk is low we have found a falling edge
-	// assert 'start_rec' and start receiving
-	else begin
-		edge1 <= RX;
-		edge2 <= edge1;
-		start_rec <= ((edge2 & ~edge1) & (state == IDLE));
-	end
-*/
+// edge detection
 always_ff @(posedge clk, negedge rst_n)	
 	if(!rst_n) begin
 		flop1 <= 1;
