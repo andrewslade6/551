@@ -118,6 +118,7 @@ next_state = IDLE;
 bck_porch_wait = 0;
 SS_n = 1'b1;
 
+//State Machine Logic		
 case (state)
 	IDLE : if (wrt) begin
 			next_state = WAIT;
