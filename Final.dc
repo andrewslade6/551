@@ -1,0 +1,76 @@
+## Final Synth Script, Andrew Slade, Sam Prosser, Brent Dranzer ##
+
+
+# read in .sv files
+read_file -format sverilog {./A2D_intf.sv\
+								./barcode.sv\
+								./cmd_cntrl.sv\
+								./dig_core.sv\
+								./motion_cntrl.sv\
+								./motor_cntrl.sv\
+								./SPI_master_2cycle_AS.sv\
+								./UART_rcv.sv }
+# read in .v files
+read_file -format verilog {./alu.v\
+							./pwm.v\
+							./pwm_8bit.v\
+							./Follower.v }
+
+
+
+set current_design Follower
+
+# create clock
+create_clock -name "clk" -period 2.5 {clk}
+
+# don't touch!!!!
+set_dont_touch_network [find port clk]
+
+# remove clk from prim inputs
+set prim_inputs [remove_from_collection [all_inputs] [find port clk]]
+
+# set input delay
+set_input_delay -clock clk 0.5 $prim_inputs
+
+# set output delay
+set_output_delay -clock clk 0.5 [all_outputs]
+
+# set drive strength to 10ohms for all inputs
+set_driving_cell -lib_cell ND2D2BWP -from_pin A1 -library tcbn40lpbwptc $prim_inputs
+
+# set max transition time to avoid 'hot electron' effect
+set_max_transition 0.15 [current_design]
+
+
+# set capacitive load on all outputs
+set_load 0.1 [all_outputs]
+
+
+# Employ TSMC32K_Lowk_Conservative wire load model
+set_wire_load_model -name TSMC32K_Lowk_Conservative
+
+# set uncertainty
+set_clock_uncertainty 0.1 clk
+
+
+
+# compile design #
+compile -map_effort medium
+
+# check design
+#check_design
+
+# report area
+#report_area
+
+# smash hierachy
+ungroup -all
+
+### recompile and check design for improvements ###
+compile -map_effort medium
+check_design
+report_area
+
+report_timing -delay max
+
+write -format verilog Follower -output Follower.vg
